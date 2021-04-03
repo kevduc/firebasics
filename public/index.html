@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Welcome to Firebase Hosting</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/7.14.0/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/7.14.0/firebase-auth.js"></script>
+    <script defer src="/__/firebase/7.14.0/firebase-firestore.js"></script>
+    <script defer src="/__/firebase/7.14.0/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/7.14.0/firebase-storage.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+
+    <link
+      href="https://unpkg.com/material-components-web@v4.0.0/dist/material-components-web.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/material-components-web@v4.0.0/dist/material-components-web.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+  </head>
+  <body
+    style="
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
+        sans-serif;
+    "
+  >
+    <script src="app.js"></script>
+    <h1 id="greeting">Hi!</h1>
+    <button
+      class="mdc-button mdc-button--raised login-button"
+      onclick="googleLogin(event)"
+    >
+      <span class="mdc-button__ripple"></span>
+      <span class="mdc-button__label">Login with Google</span>
+    </button>
+    <br />
+    <br />
+    <input type="file" onchange="uploadFile(this.files)" />
+    <br />
+    <img id="imgUpload" src="" width="100vw" />
+    <br />
+    <br />
+    <label>Message: </label><input onchange="updatePost(event)" />
+    <h1 id="title"></h1>
+    <p id="message"></p>
+  </body>
+</html>
