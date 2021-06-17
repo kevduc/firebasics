@@ -1,0 +1,28 @@
+{
+  "name": "firebasics",
+  "version": "1.0.0",
+  "description": "Discovering Firebase with a simple project",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "firebase login",
+    "start": "firebase serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevduc/firebasics.git"
+  },
+  "keywords": [
+    "firebase",
+    "fireship",
+    "tutorial"
+  ],
+  "author": "kevduc",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kevduc/firebasics/issues"
+  },
+  "homepage": "https://github.com/kevduc/firebasics#readme",
+  "devDependencies": {
+    "firebase-tools": "^9.13.0"
+  }
+}
