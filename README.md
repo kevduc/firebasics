@@ -4,6 +4,8 @@
 
 👨‍🏫 Inspired by [Jeff Delaney](https://fireship.io/)'s video tutorial: [Firebase - Ultimate Beginner's Guide](https://youtu.be/9kRgVxULbag)
 
+👉 Try it here: [firebasics-c10aa.web.app](https://firebasics-c10aa.web.app/)
+
 ## 🔮 Features
 
 - 👨‍💼 Login using your Google Account
@@ -11,7 +13,7 @@
 - 🖼 Upload a picture for your card
 - 💾 The card you create is automatically saved in your account, logout and login from anywhere without loosing it
 - 💬 Notifications to let you know what's happening
-- ✅ Proper handling of input size limits on client and server sides (failing early)
+- ✔ Proper handling of input size limits on client and server sides (failing early)
 
 ## 🎯 Goal of this project
 
