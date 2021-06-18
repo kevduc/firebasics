@@ -72,6 +72,7 @@ function googleLogin() {
           }
 
           updateCaption(data)
+          updateTitleInputField(data.title)
           cardUpdatesUnsubscribe = myCard.onSnapshot((doc) => updateCaption(doc.data()))
         })
         .catch((error) => {
@@ -132,12 +133,21 @@ function setLoggedIn(tf) {
     // reset everything
     cardMedia.style = ''
     updateCaption({ title: '', message: '' })
+    document.querySelector('#title-input').form.reset()
+    document.querySelector('#picture-upload').form.reset()
   }
 }
 
 function updateCaption({ title, message }) {
   document.querySelector('#title').innerText = title
   document.querySelector('#message').innerText = message
+}
+
+function updateTitleInputField(title) {
+  const titleInput = document.querySelector('#title-input')
+  titleInput.focus() // needs to be focused to select the inserted text
+  titleInput.setRangeText(title, 0, -1, 'select') // replace everything inside the text field with the title string
+  titleInput.dispatchEvent(new InputEvent('input')) // to update the character count
 }
 
 function updatePicture(url) {

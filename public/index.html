@@ -52,12 +52,12 @@
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
           <button class="mdc-button mdc-button--outlined login-button" onclick="googleLogin()">
             <span class="mdc-button__ripple"></span>
-            <span class="mdc-button__label">Login with Google</span>
+            <span class="mdc-button__label">Log in with Google</span>
           </button>
 
           <button class="mdc-button mdc-button--outlined logout-button" onclick="logout()">
             <span class="mdc-button__ripple"></span>
-            <span class="mdc-button__label">Logout</span>
+            <span class="mdc-button__label">Log out</span>
           </button>
         </section>
       </div>
@@ -68,7 +68,7 @@
         <div class="main-content">
           <h1 id="greeting">
             Hi, please
-            <a href="#" onclick="googleLogin()" class="login-link">login</a>!
+            <a href="#" onclick="googleLogin()" class="login-link">log in</a>!
           </h1>
 
           <div class="user-content">
@@ -76,9 +76,10 @@
               <div>
                 <label class="mdc-text-field mdc-text-field--filled">
                   <span class="mdc-text-field__ripple"></span>
-                  <span class="mdc-floating-label" id="my-label-id">Message</span>
+                  <span class="mdc-floating-label" id="my-label-id">Title</span>
                   <input
                     class="mdc-text-field__input"
+                    id="title-input"
                     type="text"
                     oninput="updateTitle(event.target.value)"
                     aria-labelledby="my-label-id"
@@ -202,7 +203,7 @@
       <footer>
         <div class="copyright">© 2021 kevduc</div>
         <div class="mention">
-          Default background picture by
+          Default card picture by
           <a href="https://unsplash.com/@perotto?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
             >Alexandre Perotto</a
           >
