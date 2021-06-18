@@ -19,11 +19,11 @@
 
 ### 🔥 Discover Firebase, including:
 
-- Firebase tools command line API
+- Firebase tools command-line API
 - Authentication, using Google Account for this app
 - Cloud Firestore Database, setup, rules, data validation and security, read/write from the app
 - Firebase Storage, setup, rules, data validation and security, read/write from the app
-- Deployment
+- Deployment, GitHub Actions for PR preview and deploying Live
 
 ### 🎨 Discover Material UI Components:
 
