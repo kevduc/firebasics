@@ -6,49 +6,183 @@
     <title>Welcome to Firebase Hosting</title>
 
     <!-- update the version number as needed -->
-    <script defer src="/__/firebase/7.14.0/firebase-app.js"></script>
+    <script defer src="/__/firebase/7.14.0/firebase-app.js" crossorigin="anonymous"></script>
     <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/7.14.0/firebase-auth.js"></script>
-    <script defer src="/__/firebase/7.14.0/firebase-firestore.js"></script>
-    <script defer src="/__/firebase/7.14.0/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/7.14.0/firebase-storage.js"></script>
+    <script defer src="/__/firebase/7.14.0/firebase-auth.js" crossorigin="anonymous"></script>
+    <script defer src="/__/firebase/7.14.0/firebase-firestore.js" crossorigin="anonymous"></script>
+    <script defer src="/__/firebase/7.14.0/firebase-messaging.js" crossorigin="anonymous"></script>
+    <script defer src="/__/firebase/7.14.0/firebase-storage.js" crossorigin="anonymous"></script>
     <!-- initialize the SDK after all desired features are loaded -->
-    <script defer src="/__/firebase/init.js"></script>
+    <script defer src="/__/firebase/init.js" crossorigin="anonymous"></script>
 
     <link
-      href="https://unpkg.com/material-components-web@v4.0.0/dist/material-components-web.min.css"
+      href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"
       rel="stylesheet"
+      crossorigin="anonymous"
     />
-    <script src="https://unpkg.com/material-components-web@v4.0.0/dist/material-components-web.min.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    />
+    <script
+      src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" crossorigin="anonymous" />
+    <link rel="stylesheet" href="./index.css" crossorigin="anonymous" />
   </head>
-  <body
-    style="
-      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
-        sans-serif;
-    "
-  >
-    <script src="app.js"></script>
-    <h1 id="greeting">Hi!</h1>
-    <button
-      class="mdc-button mdc-button--raised login-button"
-      onclick="googleLogin(event)"
-    >
-      <span class="mdc-button__ripple"></span>
-      <span class="mdc-button__label">Login with Google</span>
-    </button>
-    <br />
-    <br />
-    <input type="file" onchange="uploadFile(this.files)" />
-    <br />
-    <img id="imgUpload" src="" width="100vw" />
-    <br />
-    <br />
-    <label>Message: </label><input onchange="updatePost(event)" />
-    <h1 id="title"></h1>
-    <p id="message"></p>
+
+  <body style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">
+    <script src="app.js" crossorigin="anonymous"></script>
+
+    <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+      <div class="mdc-top-app-bar__row">
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+          <span class="mdc-top-app-bar__title">Card Generator</span>
+        </section>
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+          <button class="mdc-button mdc-button--outlined login-button" onclick="googleLogin(event)">
+            <span class="mdc-button__ripple"></span>
+            <span class="mdc-button__label">Login with Google</span>
+          </button>
+        </section>
+      </div>
+    </header>
+
+    <div class="content">
+      <main class="mdc-top-app-bar--fixed-adjust">
+        <div class="main-content">
+          <h1 id="greeting">Hi, please login!</h1>
+
+          <div class="user-content">
+            <form action="#">
+              <p>
+                <label class="mdc-text-field mdc-text-field--filled">
+                  <span class="mdc-text-field__ripple"></span>
+                  <span class="mdc-floating-label" id="my-label-id">Message</span>
+                  <input
+                    class="mdc-text-field__input"
+                    type="text"
+                    oninput="updateTitle(event.target.value)"
+                    aria-labelledby="my-label-id"
+                  />
+                  <span class="mdc-line-ripple"></span>
+                </label>
+              </p>
+              <p>
+                <label class="custom-file-input" for="picture-upload">Add a picture: </label>
+                <span class="picture-upload">
+                  <input id="picture-upload" type="file" onchange="uploadFile(this.files)" />
+                </span>
+              </p>
+            </form>
+            <div class="my-card mdc-card">
+              <div class="mdc-card__primary-action">
+                <div class="my-card__media mdc-card__media mdc-card__media--16-9">
+                  <div class="my-card__media-content mdc-card__media-content">
+                    <!-- Spinner -->
+                    <div
+                      class="picture-spinner mdc-circular-progress"
+                      style="width: 3rem; height: 3rem"
+                      role="progressbar"
+                      aria-label="Picture Loading Spinner"
+                      aria-valuemin="0"
+                      aria-valuemax="1"
+                    >
+                      <div class="mdc-circular-progress__determinate-container">
+                        <svg
+                          class="mdc-circular-progress__determinate-circle-graphic"
+                          viewBox="0 0 48 48"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle class="mdc-circular-progress__determinate-track" cx="24" cy="24" r="18" stroke-width="4" />
+                          <circle
+                            class="mdc-circular-progress__determinate-circle"
+                            cx="24"
+                            cy="24"
+                            r="18"
+                            stroke-dasharray="113.097"
+                            stroke-dashoffset="113.097"
+                            stroke-width="4"
+                          />
+                        </svg>
+                      </div>
+                      <div class="mdc-circular-progress__indeterminate-container">
+                        <div class="mdc-circular-progress__spinner-layer">
+                          <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left">
+                            <svg
+                              class="mdc-circular-progress__indeterminate-circle-graphic"
+                              viewBox="0 0 48 48"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <circle
+                                cx="24"
+                                cy="24"
+                                r="18"
+                                stroke-dasharray="113.097"
+                                stroke-dashoffset="56.549"
+                                stroke-width="4"
+                              />
+                            </svg>
+                          </div>
+                          <div class="mdc-circular-progress__gap-patch">
+                            <svg
+                              class="mdc-circular-progress__indeterminate-circle-graphic"
+                              viewBox="0 0 48 48"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <circle
+                                cx="24"
+                                cy="24"
+                                r="18"
+                                stroke-dasharray="113.097"
+                                stroke-dashoffset="56.549"
+                                stroke-width="3.2"
+                              />
+                            </svg>
+                          </div>
+                          <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right">
+                            <svg
+                              class="mdc-circular-progress__indeterminate-circle-graphic"
+                              viewBox="0 0 48 48"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <circle
+                                cx="24"
+                                cy="24"
+                                r="18"
+                                stroke-dasharray="113.097"
+                                stroke-dashoffset="56.549"
+                                stroke-width="4"
+                              />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /Spinner -->
+                    <p class="no-picture-message">You've not uploaded a picture yet</p>
+                  </div>
+                </div>
+                <div class="mdc-card__content">
+                  <h2 id="title"></h2>
+                  <p id="message"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer>
+        <div class="copyright">© 2021 kevduc</div>
+        <div class="mention">
+          Default background picture by
+          <a href="https://unsplash.com/@perotto?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+            >Alexandre Perotto</a
+          >
+          on
+          <a href="https://unsplash.com/s/photos/plains?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+            >Unsplash</a
+          >
+        </div>
+      </footer>
+    </div>
   </body>
 </html>
