@@ -90,6 +90,8 @@
                   </div>
                 </label>
               </div>
+            </form>
+            <form action="#">
               <div>
                 <label class="custom-file-input" for="picture-upload">Add a picture: </label>
                 <div class="picture-upload">
@@ -231,6 +233,11 @@
     <div class="picture-too-big-snackbar mdc-snackbar">
       <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
         <div class="mdc-snackbar__label" aria-atomic="false">❌ Couldn't upload the picture, the maximum size is 300KB</div>
+      </div>
+    </div>
+    <div class="wrong-file-type-snackbar mdc-snackbar">
+      <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
+        <div class="mdc-snackbar__label" aria-atomic="false">❌ File type not supported</div>
       </div>
     </div>
     <div class="generic-error-snackbar mdc-snackbar">

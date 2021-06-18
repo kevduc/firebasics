@@ -9,6 +9,7 @@ let snackbar = {
   loggedOutError: null,
   loginError: null,
   pictureTooBig: null,
+  wrongFileType: null,
   genericError: null,
 }
 let cardMedia = null
@@ -191,6 +192,12 @@ function ellipsify(str, maxLength) {
   return `${str.slice(0, Math.floor(midLength))}…${str.slice(-Math.ceil(midLength))}`
 }
 
+const isImage = (file) => /image\/\w+/.test(file.type)
+
+function resetFileInput() {
+  document.querySelector('#picture-upload').form.reset()
+}
+
 function uploadFile(files) {
   if (user === null) return
 
@@ -202,6 +209,13 @@ function uploadFile(files) {
   const imageRef = getUserCardImageRef(user.uid)
 
   const file = files.item(0)
+
+  if (!isImage(file)) {
+    snackbar.wrongFileType.open()
+    resetFileInput()
+    return
+  }
+
   updateFileSize(file.size)
 
   if (file.size > FileSizeLimit) {
@@ -221,7 +235,10 @@ function uploadFile(files) {
     })
     .catch((error) => {
       console.error(error)
-      if (file.size > FileSizeLimit) setPictureTooBig(true)
+      if (!isImage(file)) {
+        snackbar.wrongFileType.open()
+        resetFileInput()
+      } else if (file.size > FileSizeLimit) setPictureTooBig(true)
       else snackbar.genericError.open()
     })
     .finally(() => {
