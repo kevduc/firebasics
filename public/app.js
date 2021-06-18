@@ -7,11 +7,13 @@ let pictureSpinner = null
 let snackbar = {
   loggedOut: null,
   loggedOutError: null,
+  loginError: null,
   pictureTooBig: null,
+  wrongFileType: null,
   genericError: null,
 }
 let cardMedia = null
-let postUnsubscribe = null
+let cardUpdatesUnsubscribe = null
 let originalGreeting = null
 
 const initializeMDC = (MDCClass, query) => Array.from(document.querySelectorAll(query)).map((el) => new MDCClass(el))
@@ -33,13 +35,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
     snackbar[key] = initializeMDC(mdc.snackbar.MDCSnackbar, `.${hyphenate(key)}-snackbar`)[0]
   })
 
-  // const app = admin.initializeApp({
-  //   credential: admin.credential.applicationDefault(),
-  //   databaseURL: "https://firebasics-c10aa.firebaseio.com",
-  // });
-
   const app = firebase.app()
 })
+
+const getUserCardDataRef = (userId) => firebase.firestore().collection('cards').doc(userId)
+const getUserCardImageRef = (userId) => firebase.storage().ref().child(`${userId}`)
 
 function googleLogin() {
   const provider = new firebase.auth.GoogleAuthProvider()
@@ -53,26 +53,31 @@ function googleLogin() {
 
       setPictureLoading(true)
 
-      const db = firebase.firestore()
-      const myPost = db.collection('posts').doc(user.uid)
+      const myCard = getUserCardDataRef(user.uid)
 
-      myPost.get().then((doc) => {
-        let data = doc.data()
+      myCard
+        .get()
+        .then((doc) => {
+          let data = doc.data()
 
-        if (!doc.exists || !data.title || !data.message) {
-          data = Object.assign(
-            {
-              title: 'A Picture',
-              message: '',
-            },
-            data
-          )
-          myPost.set(data, { merge: true })
-        }
+          if (!doc.exists || !data.title || !data.message) {
+            data = Object.assign(
+              {
+                title: 'A Picture',
+                message: '',
+              },
+              data
+            )
+            myCard.set(data, { merge: true })
+          }
 
-        updateCaption(data)
-        postUnsubscribe = myPost.onSnapshot((doc) => updateCaption(doc.data()))
-      })
+          updateCaption(data)
+          cardUpdatesUnsubscribe = myCard.onSnapshot((doc) => updateCaption(doc.data()))
+        })
+        .catch((error) => {
+          console.error(error)
+          snackbar.genericError.open()
+        })
 
       firebase
         .storage()
@@ -96,7 +101,10 @@ function googleLogin() {
         })
         .finally(() => setPictureLoading(false))
     })
-    .catch(console.log)
+    .catch((error) => {
+      console.error(error)
+      snackbar.loginError.open()
+    })
 }
 
 function logout() {
@@ -104,7 +112,7 @@ function logout() {
     .auth()
     .signOut()
     .then(() => {
-      postUnsubscribe()
+      cardUpdatesUnsubscribe()
       user = null
       setLoggedIn(false)
       snackbar.loggedOut.open()
@@ -121,14 +129,15 @@ function setLoggedIn(tf) {
   document.querySelector('.logout-button').style.display = tf ? 'initial' : 'none'
   document.querySelector('.user-content').style.display = tf ? 'initial' : 'none'
   if (tf === false) {
+    // reset everything
     cardMedia.style = ''
     updateCaption({ title: '', message: '' })
   }
 }
 
-function updateCaption(data) {
-  document.querySelector('#title').innerText = data.title
-  document.querySelector('#message').innerText = data.message
+function updateCaption({ title, message }) {
+  document.querySelector('#title').innerText = title
+  document.querySelector('#message').innerText = message
 }
 
 function updatePicture(url) {
@@ -147,20 +156,12 @@ function setPictureLoading(tf) {
 
 function updateMessage(message) {
   if (user === null) return
-
-  const db = firebase.firestore()
-  const myPost = db.collection('posts').doc(user.uid)
-
-  myPost.update({ message: message.slice(0, MessageLengthMax) })
+  getUserCardDataRef(user.uid).update({ message: message.slice(0, MessageLengthMax) })
 }
 
 function updateTitle(title) {
   if (user === null) return
-
-  const db = firebase.firestore()
-  const myPost = db.collection('posts').doc(user.uid)
-
-  myPost.update({ title: title.slice(0, TitleLengthMax) })
+  getUserCardDataRef(user.uid).update({ title: title.slice(0, TitleLengthMax) })
 }
 
 function formatFileSize(number) {
@@ -191,16 +192,30 @@ function ellipsify(str, maxLength) {
   return `${str.slice(0, Math.floor(midLength))}…${str.slice(-Math.ceil(midLength))}`
 }
 
+const isImage = (file) => /image\/\w+/.test(file.type)
+
+function resetFileInput() {
+  document.querySelector('#picture-upload').form.reset()
+}
+
 function uploadFile(files) {
+  if (user === null) return
+
   updateFileSize(0)
-  document.querySelector('.file-size').classList.remove('too-big')
+  setPictureTooBig(false)
 
-  if (user === null || files.length === 0) return
+  if (files.length === 0) return
 
-  const storageRef = firebase.storage().ref()
-  const imageRef = storageRef.child(`${user.uid}`)
+  const imageRef = getUserCardImageRef(user.uid)
 
   const file = files.item(0)
+
+  if (!isImage(file)) {
+    snackbar.wrongFileType.open()
+    resetFileInput()
+    return
+  }
+
   updateFileSize(file.size)
 
   if (file.size > FileSizeLimit) {
@@ -209,9 +224,9 @@ function uploadFile(files) {
   }
 
   setPictureLoading(true)
-  const task = imageRef.put(file)
 
-  task
+  imageRef
+    .put(file)
     .then((snapshot) => {
       snapshot.ref.getDownloadURL().then((url) => {
         updatePicture(url)
@@ -220,7 +235,10 @@ function uploadFile(files) {
     })
     .catch((error) => {
       console.error(error)
-      if (file.size > FileSizeLimit) setPictureTooBig(true)
+      if (!isImage(file)) {
+        snackbar.wrongFileType.open()
+        resetFileInput()
+      } else if (file.size > FileSizeLimit) setPictureTooBig(true)
       else snackbar.genericError.open()
     })
     .finally(() => {
