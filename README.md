@@ -27,4 +27,4 @@
 
 - Made use of Buttons, Cards, App bars, Text fields (with character limit), Progress indicators, Snackbars
 - Used both CSS and JavaScript libraries for the best Design and UX (e.g. for button ripple effect or to trigger notifications)
-- Purple Theme
+- Used the MDC CSS theme variables so the UI design can adapt to any theme (Purple theme for now)
