@@ -1,10 +1,12 @@
 let user = null
 let pictureSpinner = null
 let cardMedia = null
+let postUnsubscribe = null
 
 const initializeMDC = (MDCClass, query) => Array.from(document.querySelectorAll(query)).map((el) => new MDCClass(el))
 
 document.addEventListener('DOMContentLoaded', (event) => {
+  cardMedia = document.querySelector('.my-card__media')
   setLoggedIn(false)
 
   const buttonRipples = initializeMDC(mdc.ripple.MDCRipple, '.mdc-button, .mdc-icon-button, .mdc-card__primary-action')
@@ -12,8 +14,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const topBar = initializeMDC(mdc.topAppBar.MDCTopAppBar, '.mdc-top-app-bar')
   pictureSpinner = initializeMDC(mdc.circularProgress.MDCCircularProgress, '.picture-spinner')[0]
   pictureSpinner.foundation.setDeterminate(false)
-
-  cardMedia = document.querySelector('.my-card__media')
 
   // const app = admin.initializeApp({
   //   credential: admin.credential.applicationDefault(),
@@ -53,7 +53,7 @@ function googleLogin() {
         }
 
         updateCaption(data)
-        myPost.onSnapshot((doc) => updateCaption(doc.data()))
+        postUnsubscribe = myPost.onSnapshot((doc) => updateCaption(doc.data()))
       })
 
       firebase
@@ -84,7 +84,8 @@ function logout() {
   firebase
     .auth()
     .signOut()
-    .then(() => {
+    .finally(() => {
+      postUnsubscribe()
       user = null
       setLoggedIn(false)
     })
@@ -95,6 +96,10 @@ function setLoggedIn(tf) {
   document.querySelector('.login-button').style.display = tf ? 'none' : 'initial'
   document.querySelector('.logout-button').style.display = tf ? 'initial' : 'none'
   document.querySelector('.user-content').style.display = tf ? 'initial' : 'none'
+  if (tf === false) {
+    cardMedia.style = ''
+    updateCaption({ title: '', message: '' })
+  }
 }
 
 function updateCaption(data) {
@@ -103,7 +108,7 @@ function updateCaption(data) {
 }
 
 function updatePicture(url) {
-  cardMedia.style = `background-image: url("${url}")`
+  cardMedia.style.backgroundImage = `url("${url}")`
   setNoPicture(false)
 }
 
