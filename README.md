@@ -2,9 +2,9 @@
 
 🕵️‍♂️ Discovering Firebase with a simple "Card Creator" project
 
-👨‍🏫 Inspired by [Jeff Delaney](https://fireship.io/)'s video tutorial: [Firebase - Ultimate Beginner's Guide](https://youtu.be/9kRgVxULbag)
-
 👉 Try it here: [firebasics-c10aa.web.app](https://firebasics-c10aa.web.app/)
+
+👨‍🏫 Inspired by [Jeff Delaney](https://fireship.io/)'s video tutorial: [Firebase - Ultimate Beginner's Guide](https://youtu.be/9kRgVxULbag)
 
 ## 🔮 Features
 
