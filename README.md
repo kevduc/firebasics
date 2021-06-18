@@ -9,7 +9,7 @@
 ## 🔮 Features
 
 - 👨‍💼 Log in using your Google Account
-- ✏ Write the caption title for your card
+- ✍ Write the caption title for your card
 - 🖼 Upload a picture for your card
 - 💾 The card you create is automatically saved in your account, log out and log in from anywhere, it will still be there
 - 💬 Notifications to let you know what's happening
