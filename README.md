@@ -13,7 +13,7 @@
 - 🖼 Upload a picture for your card
 - 💾 The card you create is automatically saved in your account, logout and login from anywhere without loosing it
 - 💬 Notifications to let you know what's happening
-- ✔ Proper handling of input size limits on client and server sides (failing early)
+- ✔ Proper handling of input validation (e.g. size limits) on client and server sides (failing early)
 
 ## 🎯 Goal of this project
 
