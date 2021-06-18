@@ -167,11 +167,13 @@ function formatFileSize(number) {
   const unit = 'B'
   let prefixes = ['', 'K', 'M', 'G']
 
-  let powers = Object.keys(prefixes).map((p) => Math.pow(1024, p))
+  let powers = Object.keys(prefixes).map((p) => 1024 ** p)
   let rank = powers.reduce((rank, threshold) => rank + (number >= threshold), -1)
   let value = number / powers[rank]
 
-  return `${value.toFixed(1 - (value >= 10))}${prefixes[rank]}${unit}`
+  const numDecimals = 1 - (value >= 10)
+  value = Math.ceil(value * 10 ** numDecimals) / 10 ** numDecimals
+  return `${value.toFixed(numDecimals)}${prefixes[rank]}${unit}`
 }
 
 function updateFileSize(size) {
