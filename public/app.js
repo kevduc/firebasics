@@ -181,6 +181,12 @@ function setPictureTooBig(tf) {
   tf && snackbar.pictureTooBig.open()
 }
 
+function ellipsify(str, maxLength) {
+  if (str.length <= maxLength) return str
+  const midLength = (maxLength - 1) / 2
+  return `${str.slice(0, Math.floor(midLength))}…${str.slice(-Math.ceil(midLength))}`
+}
+
 function uploadFile(files) {
   updateFileSize(0)
   document.querySelector('.file-size').classList.remove('too-big')
@@ -205,9 +211,7 @@ function uploadFile(files) {
     .then((snapshot) => {
       snapshot.ref.getDownloadURL().then((url) => {
         updatePicture(url)
-
-        const parts = file.name.split(/\.([^\.]*)$/, 2)
-        updateMessage(`${parts[0].slice(0, MessageLengthMax - 2 - parts[1].length)}….${parts[1]}`)
+        updateMessage(ellipsify(file.name, MessageLengthMax))
       })
     })
     .catch((error) => {
