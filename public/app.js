@@ -63,7 +63,7 @@ function googleLogin() {
       firebase
         .storage()
         .ref()
-        .child(`${user.uid}.jpg`)
+        .child(`${user.uid}`)
         .getDownloadURL()
         .then((url) => updatePicture(url))
         .catch((error) => {
@@ -94,7 +94,7 @@ function logout() {
       setLoggedIn(false)
       loggedOutSnackbar.open()
     })
-    .then((error) => {
+    .catch((error) => {
       console.error(error)
       loggedOutErrorSnackbar.open()
     })
@@ -153,7 +153,7 @@ function uploadFile(files) {
 
   setPictureLoading(true)
   const storageRef = firebase.storage().ref()
-  const imageRef = storageRef.child(`${user.uid}.jpg`)
+  const imageRef = storageRef.child(`${user.uid}`)
 
   const file = files.item(0)
 
