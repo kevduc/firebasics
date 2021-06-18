@@ -8,12 +8,13 @@
 
 ## 🔮 Features
 
-- 👨‍💼 Login using your Google Account
+- 👨‍💼 Log in using your Google Account
 - ✏ Write the caption title for your card
 - 🖼 Upload a picture for your card
-- 💾 The card you create is automatically saved in your account, logout and login from anywhere without loosing it
+- 💾 The card you create is automatically saved in your account, log out and log in from anywhere, it will still be there
 - 💬 Notifications to let you know what's happening
 - ✔ Proper handling of input validation (e.g. size limits) on client and server sides (failing early)
+- 📱 Responsive design, works well on smartphone, tablets, desktop, etc.
 
 ## 🎯 Goal of this project
 
@@ -30,3 +31,7 @@
 - Made use of Buttons, Cards, App bars, Text fields (with character limit), Progress indicators, Snackbars
 - Used both CSS and JavaScript libraries for the best Design and UX (e.g. for button ripple effect or to trigger notifications)
 - Used the MDC CSS theme variables so the UI design can adapt to any theme (Purple theme here)
+
+## 📸 What it looks like
+
+![2021-06-18 16_32_51-Card Creator](https://user-images.githubusercontent.com/64347790/122584967-df77d400-d052-11eb-9147-1e66d853f85d.png)
