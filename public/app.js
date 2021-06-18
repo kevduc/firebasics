@@ -12,6 +12,7 @@ let snackbar = {
 }
 let cardMedia = null
 let postUnsubscribe = null
+let originalGreeting = null
 
 const initializeMDC = (MDCClass, query) => Array.from(document.querySelectorAll(query)).map((el) => new MDCClass(el))
 
@@ -19,6 +20,7 @@ const hyphenate = (txt) => txt.replace(/[A-Z]/g, (match) => `-${match.toLowerCas
 
 document.addEventListener('DOMContentLoaded', (event) => {
   cardMedia = document.querySelector('.my-card__media')
+  originalGreeting = document.querySelector('#greeting').innerHTML
   setLoggedIn(false)
 
   const buttonRipples = initializeMDC(mdc.ripple.MDCRipple, '.mdc-button, .mdc-icon-button, .mdc-card__primary-action')
@@ -114,7 +116,7 @@ function logout() {
 }
 
 function setLoggedIn(tf) {
-  document.querySelector('#greeting').innerText = tf ? `Welcome ${user.displayName.split(' ')[0]}!` : `Hi, please login!`
+  document.querySelector('#greeting').innerHTML = tf ? `Welcome ${user.displayName.split(' ')[0]}!` : originalGreeting
   document.querySelector('.login-button').style.display = tf ? 'none' : 'initial'
   document.querySelector('.logout-button').style.display = tf ? 'initial' : 'none'
   document.querySelector('.user-content').style.display = tf ? 'initial' : 'none'
