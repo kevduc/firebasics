@@ -34,4 +34,4 @@
 
 ## 📸 What it looks like
 
-![2021-06-18 16_32_51-Card Creator](https://user-images.githubusercontent.com/64347790/122584967-df77d400-d052-11eb-9147-1e66d853f85d.png)
+![screenshot-2021-06-18 18_08_18-Card Creator](https://user-images.githubusercontent.com/64347790/122595403-4fd92200-d060-11eb-8f19-fff71c2c9678.png)
