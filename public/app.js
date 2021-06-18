@@ -1,4 +1,6 @@
 const FileSizeLimit = 300 * 1024
+const TitleLengthMax = 50
+const MessageLengthMax = 100
 
 let user = null
 let pictureSpinner = null
@@ -145,7 +147,7 @@ function updateMessage(message) {
   const db = firebase.firestore()
   const myPost = db.collection('posts').doc(user.uid)
 
-  myPost.update({ message })
+  myPost.update({ message: message.slice(0, MessageLengthMax) })
 }
 
 function updateTitle(title) {
@@ -154,7 +156,7 @@ function updateTitle(title) {
   const db = firebase.firestore()
   const myPost = db.collection('posts').doc(user.uid)
 
-  myPost.update({ title })
+  myPost.update({ title: title.slice(0, TitleLengthMax) })
 }
 
 function formatFileSize(number) {
@@ -197,7 +199,9 @@ function uploadFile(files) {
     .then((snapshot) => {
       snapshot.ref.getDownloadURL().then((url) => {
         updatePicture(url)
-        updateMessage(file.name)
+
+        const parts = file.name.split(/\.([^\.]*)$/, 2)
+        updateMessage(`${parts[0].slice(0, MessageLengthMax - 2 - parts[1].length)}….${parts[1]}`)
       })
     })
     .catch((error) => {

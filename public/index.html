@@ -70,7 +70,7 @@
 
           <div class="user-content">
             <form action="#">
-              <p>
+              <div>
                 <label class="mdc-text-field mdc-text-field--filled">
                   <span class="mdc-text-field__ripple"></span>
                   <span class="mdc-floating-label" id="my-label-id">Message</span>
@@ -79,10 +79,14 @@
                     type="text"
                     oninput="updateTitle(event.target.value)"
                     aria-labelledby="my-label-id"
+                    maxlength="50"
                   />
                   <span class="mdc-line-ripple"></span>
+                  <div class="mdc-text-field-helper-line">
+                    <div class="mdc-text-field-character-counter">0 / 50</div>
+                  </div>
                 </label>
-              </p>
+              </div>
               <div>
                 <label class="custom-file-input" for="picture-upload">Add a picture: </label>
                 <div class="picture-upload">

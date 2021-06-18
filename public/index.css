@@ -43,6 +43,10 @@ h1 {
   display: none;
 }
 
+form > div {
+  margin: 1rem 0;
+}
+
 .picture-upload {
   padding: 0.5rem;
   width: fit-content;
