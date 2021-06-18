@@ -12,8 +12,12 @@ body {
   margin: 0;
 }
 
-.login-button {
+.mdc-top-app-bar .mdc-button {
   background-color: rgb(239, 239, 239) !important;
+}
+
+.logout-button {
+  display: none;
 }
 
 .content {

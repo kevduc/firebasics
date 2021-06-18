@@ -5,6 +5,8 @@ let cardMedia = null
 const initializeMDC = (MDCClass, query) => Array.from(document.querySelectorAll(query)).map((el) => new MDCClass(el))
 
 document.addEventListener('DOMContentLoaded', (event) => {
+  setLoggedIn(false)
+
   const buttonRipples = initializeMDC(mdc.ripple.MDCRipple, '.mdc-button, .mdc-icon-button, .mdc-card__primary-action')
   const textFields = initializeMDC(mdc.textField.MDCTextField, '.mdc-text-field')
   const topBar = initializeMDC(mdc.topAppBar.MDCTopAppBar, '.mdc-top-app-bar')
@@ -21,7 +23,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const app = firebase.app()
 })
 
-function googleLogin(e) {
+function googleLogin() {
   const provider = new firebase.auth.GoogleAuthProvider()
 
   firebase
@@ -29,9 +31,8 @@ function googleLogin(e) {
     .signInWithPopup(provider)
     .then((result) => {
       user = result.user
-      document.querySelector('#greeting').innerText = `Welcome ${user.displayName}!`
-      document.querySelector('.login-button').style.display = 'none'
-      document.querySelector('.user-content').style.display = 'initial'
+      setLoggedIn(true)
+
       setPictureLoading(true)
 
       const db = firebase.firestore()
@@ -77,6 +78,23 @@ function googleLogin(e) {
         .finally(() => setPictureLoading(false))
     })
     .catch(console.log)
+}
+
+function logout() {
+  firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      user = null
+      setLoggedIn(false)
+    })
+}
+
+function setLoggedIn(tf) {
+  document.querySelector('#greeting').innerText = tf ? `Welcome ${user.displayName}!` : `Hi, please login!`
+  document.querySelector('.login-button').style.display = tf ? 'none' : 'initial'
+  document.querySelector('.logout-button').style.display = tf ? 'initial' : 'none'
+  document.querySelector('.user-content').style.display = tf ? 'initial' : 'none'
 }
 
 function updateCaption(data) {

@@ -34,12 +34,17 @@
     <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
       <div class="mdc-top-app-bar__row">
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-          <span class="mdc-top-app-bar__title">Card Generator</span>
+          <span class="mdc-top-app-bar__title">Card Creator</span>
         </section>
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
-          <button class="mdc-button mdc-button--outlined login-button" onclick="googleLogin(event)">
+          <button class="mdc-button mdc-button--outlined login-button" onclick="googleLogin()">
             <span class="mdc-button__ripple"></span>
             <span class="mdc-button__label">Login with Google</span>
+          </button>
+
+          <button class="mdc-button mdc-button--outlined logout-button" onclick="logout()">
+            <span class="mdc-button__ripple"></span>
+            <span class="mdc-button__label">Logout</span>
           </button>
         </section>
       </div>
