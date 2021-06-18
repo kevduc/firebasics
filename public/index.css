@@ -44,9 +44,35 @@ h1 {
 }
 
 .picture-upload {
-  display: block;
   padding: 0.5rem;
-  width: max-content;
+  width: fit-content;
+
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.file-size,
+#picture-upload {
+  flex: 100 1 auto;
+}
+
+.size-limit {
+  flex: 1 1 auto;
+}
+
+.file-size,
+.size-limit {
+  margin-left: 1ch;
+  font-size: smaller;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.file-size.too-big {
+  color: red;
+  font-weight: bolder;
 }
 
 .my-card {

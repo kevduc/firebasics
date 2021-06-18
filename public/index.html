@@ -83,12 +83,14 @@
                   <span class="mdc-line-ripple"></span>
                 </label>
               </p>
-              <p>
+              <div>
                 <label class="custom-file-input" for="picture-upload">Add a picture: </label>
-                <span class="picture-upload">
-                  <input id="picture-upload" type="file" onchange="uploadFile(this.files)" />
-                </span>
-              </p>
+                <div class="picture-upload">
+                  <input id="picture-upload" type="file" accept="image/*" onchange="uploadFile(this.files)" />
+                  <div class="file-size"></div>
+                  <div class="size-limit">(max 300KB)</div>
+                </div>
+              </div>
             </form>
             <div class="my-card mdc-card">
               <div class="mdc-card__primary-action">
@@ -212,6 +214,11 @@
     <div class="logged-out-error-snackbar mdc-snackbar">
       <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
         <div class="mdc-snackbar__label" aria-atomic="false">❌ Couldn't log out, please refresh the page 🔄</div>
+      </div>
+    </div>
+    <div class="picture-too-big-snackbar mdc-snackbar">
+      <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
+        <div class="mdc-snackbar__label" aria-atomic="false">❌ Couldn't upload the picture, the maximum size is 300KB</div>
       </div>
     </div>
     <!-- /Snackbars -->

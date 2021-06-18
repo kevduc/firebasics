@@ -1,11 +1,18 @@
+const FileSizeLimit = 300 * 1024
+
 let user = null
 let pictureSpinner = null
-let loggedOutSnackbar = null
-let loggedOutErrorSnackbar = null
+let snackbar = {
+  loggedOut: null,
+  loggedOutError: null,
+  pictureTooBig: null,
+}
 let cardMedia = null
 let postUnsubscribe = null
 
 const initializeMDC = (MDCClass, query) => Array.from(document.querySelectorAll(query)).map((el) => new MDCClass(el))
+
+const hyphenate = (txt) => txt.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`)
 
 document.addEventListener('DOMContentLoaded', (event) => {
   cardMedia = document.querySelector('.my-card__media')
@@ -16,8 +23,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const topBar = initializeMDC(mdc.topAppBar.MDCTopAppBar, '.mdc-top-app-bar')
   pictureSpinner = initializeMDC(mdc.circularProgress.MDCCircularProgress, '.picture-spinner')[0]
   pictureSpinner.foundation.setDeterminate(false)
-  loggedOutSnackbar = initializeMDC(mdc.snackbar.MDCSnackbar, '.logged-out-snackbar')[0]
-  loggedOutErrorSnackbar = initializeMDC(mdc.snackbar.MDCSnackbar, '.logged-out-error-snackbar')[0]
+
+  Object.keys(snackbar).forEach((key) => {
+    snackbar[key] = initializeMDC(mdc.snackbar.MDCSnackbar, `.${hyphenate(key)}-snackbar`)[0]
+  })
 
   // const app = admin.initializeApp({
   //   credential: admin.credential.applicationDefault(),
@@ -92,11 +101,11 @@ function logout() {
       postUnsubscribe()
       user = null
       setLoggedIn(false)
-      loggedOutSnackbar.open()
+      snackbar.loggedOut.open()
     })
     .catch((error) => {
       console.error(error)
-      loggedOutErrorSnackbar.open()
+      snackbar.loggedOutError.open()
     })
 }
 
@@ -148,15 +157,40 @@ function updateTitle(title) {
   myPost.update({ title })
 }
 
+function formatFileSize(number) {
+  const unit = 'B'
+  let prefixes = ['', 'K', 'M', 'G']
+
+  let powers = Object.keys(prefixes).map((p) => Math.pow(1024, p))
+  let rank = powers.reduce((rank, threshold) => rank + (number >= threshold), -1)
+  let value = number / powers[rank]
+
+  return `${value.toFixed(1 - (value >= 10))}${prefixes[rank]}${unit}`
+}
+
+function updateFileSize(size) {
+  document.querySelector('.file-size').innerText = size > 0 ? formatFileSize(size) : ''
+}
+
 function uploadFile(files) {
+  updateFileSize(0)
+  document.querySelector('.file-size').classList.remove('too-big')
+
   if (user === null || files.length === 0) return
 
-  setPictureLoading(true)
   const storageRef = firebase.storage().ref()
   const imageRef = storageRef.child(`${user.uid}`)
 
   const file = files.item(0)
+  updateFileSize(file.size)
 
+  if (file.size > FileSizeLimit) {
+    document.querySelector('.file-size').classList.add('too-big')
+    snackbar.pictureTooBig.open()
+    return
+  }
+
+  setPictureLoading(true)
   const task = imageRef.put(file)
 
   task
