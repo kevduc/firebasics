@@ -8,6 +8,7 @@ let snackbar = {
   loggedOut: null,
   loggedOutError: null,
   pictureTooBig: null,
+  genericError: null,
 }
 let cardMedia = null
 let postUnsubscribe = null
@@ -87,6 +88,7 @@ function googleLogin() {
 
             default:
               console.error(error)
+              snackbar.genericError.open()
               break
           }
         })
@@ -112,7 +114,7 @@ function logout() {
 }
 
 function setLoggedIn(tf) {
-  document.querySelector('#greeting').innerText = tf ? `Welcome ${user.displayName}!` : `Hi, please login!`
+  document.querySelector('#greeting').innerText = tf ? `Welcome ${user.displayName.split(' ')[0]}!` : `Hi, please login!`
   document.querySelector('.login-button').style.display = tf ? 'none' : 'initial'
   document.querySelector('.logout-button').style.display = tf ? 'initial' : 'none'
   document.querySelector('.user-content').style.display = tf ? 'initial' : 'none'
@@ -174,6 +176,11 @@ function updateFileSize(size) {
   document.querySelector('.file-size').innerText = size > 0 ? formatFileSize(size) : ''
 }
 
+function setPictureTooBig(tf) {
+  document.querySelector('.file-size').classList[tf ? 'add' : 'remove']('too-big')
+  tf && snackbar.pictureTooBig.open()
+}
+
 function uploadFile(files) {
   updateFileSize(0)
   document.querySelector('.file-size').classList.remove('too-big')
@@ -187,8 +194,7 @@ function uploadFile(files) {
   updateFileSize(file.size)
 
   if (file.size > FileSizeLimit) {
-    document.querySelector('.file-size').classList.add('too-big')
-    snackbar.pictureTooBig.open()
+    setPictureTooBig(true)
     return
   }
 
@@ -206,6 +212,8 @@ function uploadFile(files) {
     })
     .catch((error) => {
       console.error(error)
+      if (file.size > FileSizeLimit) setPictureTooBig(true)
+      else snackbar.genericError.open()
     })
     .finally(() => {
       setPictureLoading(false)
