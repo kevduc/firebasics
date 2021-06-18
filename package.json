@@ -4,8 +4,8 @@
   "description": "Discovering Firebase with a simple project",
   "main": "index.js",
   "scripts": {
-    "prestart": "firebase login",
-    "start": "firebase serve",
+    "predev": "firebase login",
+    "dev": "firebase serve",
     "deploy": "firebase deploy"
   },
   "repository": {

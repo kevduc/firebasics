@@ -1,5 +1,7 @@
 let user = null
 let pictureSpinner = null
+let loggedOutSnackbar = null
+let loggedOutErrorSnackbar = null
 let cardMedia = null
 let postUnsubscribe = null
 
@@ -14,6 +16,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const topBar = initializeMDC(mdc.topAppBar.MDCTopAppBar, '.mdc-top-app-bar')
   pictureSpinner = initializeMDC(mdc.circularProgress.MDCCircularProgress, '.picture-spinner')[0]
   pictureSpinner.foundation.setDeterminate(false)
+  loggedOutSnackbar = initializeMDC(mdc.snackbar.MDCSnackbar, '.logged-out-snackbar')[0]
+  loggedOutErrorSnackbar = initializeMDC(mdc.snackbar.MDCSnackbar, '.logged-out-error-snackbar')[0]
 
   // const app = admin.initializeApp({
   //   credential: admin.credential.applicationDefault(),
@@ -84,10 +88,15 @@ function logout() {
   firebase
     .auth()
     .signOut()
-    .finally(() => {
+    .then(() => {
       postUnsubscribe()
       user = null
       setLoggedIn(false)
+      loggedOutSnackbar.open()
+    })
+    .then((error) => {
+      console.error(error)
+      loggedOutErrorSnackbar.open()
     })
 }
 

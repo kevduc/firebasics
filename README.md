@@ -10,6 +10,7 @@
 - Write the caption title for your card
 - Upload an image for your card
 - The card you create is automatically saved in your account, logout and login from anywhere without loosing it
+- Notification when you logout
 
 ## 🎯 Goal of this project
 
@@ -23,6 +24,6 @@
 
 ### 🎨 Discover Material UI Components:
 
-- Made use of Buttons, Cards, App bars, Text fields, Progress indicators
+- Made use of Buttons, Cards, App bars, Text fields, Progress indicators, Snackbars
 - Used both CSS and JavaScript libraries (e.g. for button ripple effect)
 - Purple Theme
