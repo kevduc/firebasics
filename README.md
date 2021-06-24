@@ -1,4 +1,4 @@
-# firebasics
+# Firebase - Card Creator
 
 🕵️‍♂️ Discovering Firebase with a simple "Card Creator" project
 
