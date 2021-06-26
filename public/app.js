@@ -8,6 +8,8 @@ let snackbar = {
   loggedOut: null,
   loggedOutError: null,
   loginError: null,
+  accountExistsWithDifferentCredential: null,
+  popupBlocked: null,
   pictureTooBig: null,
   wrongFileType: null,
   genericError: null,
@@ -41,70 +43,49 @@ document.addEventListener('DOMContentLoaded', (event) => {
 const getUserCardDataRef = (userId) => firebase.firestore().collection('cards').doc(userId)
 const getUserCardImageRef = (userId) => firebase.storage().ref().child(`${userId}`)
 
-function googleLogin() {
-  const provider = new firebase.auth.GoogleAuthProvider()
+const getProviderForProviderId = (methodId) =>
+  ({
+    'google.com': new firebase.auth.GoogleAuthProvider(),
+    'github.com': new firebase.auth.GithubAuthProvider(),
+  }[methodId])
 
-  firebase
-    .auth()
+const googleLogin = () => login(new firebase.auth.GoogleAuthProvider())
+const githubLogin = () => login(new firebase.auth.GithubAuthProvider())
+
+function login(provider) {
+  const auth = firebase.auth()
+  auth
     .signInWithPopup(provider)
     .then((result) => {
-      user = result.user
-      setLoggedIn(true)
-
-      setPictureLoading(true)
-
-      const myCard = getUserCardDataRef(user.uid)
-
-      myCard
-        .get()
-        .then((doc) => {
-          let data = doc.data()
-
-          if (!doc.exists || !data.title || !data.message) {
-            data = Object.assign(
-              {
-                title: 'A Picture',
-                message: '',
-              },
-              data
-            )
-            myCard.set(data, { merge: true })
-          }
-
-          updateCaption(data)
-          updateTitleInputField(data.title)
-          cardUpdatesUnsubscribe = myCard.onSnapshot((doc) => updateCaption(doc.data()))
-        })
-        .catch((error) => {
-          console.error(error)
-          snackbar.genericError.open()
-        })
-
-      firebase
-        .storage()
-        .ref()
-        .child(`${user.uid}`)
-        .getDownloadURL()
-        .then((url) => updatePicture(url))
-        .catch((error) => {
-          setNoPicture(true)
-
-          switch (error.code) {
-            case 'storage/object-not-found':
-              console.warn('User Picture not found')
-              break
-
-            default:
-              console.error(error)
-              snackbar.genericError.open()
-              break
-          }
-        })
-        .finally(() => setPictureLoading(false))
+      loadUserData(result)
     })
-    .catch((error) => {
-      console.error(error)
-      snackbar.loginError.open()
+    .catch(function (error) {
+      if (error.code === 'auth/account-exists-with-different-credential') {
+        snackbar.accountExistsWithDifferentCredential.open()
+        const pendingCred = error.credential
+        const email = error.email
+        auth.fetchSignInMethodsForEmail(email).then(function (methods) {
+          const provider = getProviderForProviderId(methods[0])
+          auth
+            .signInWithPopup(provider)
+            .then(function (result) {
+              result.user.linkWithCredential(pendingCred).then(function () {
+                loadUserData(result)
+              })
+            })
+            .catch((error) => {
+              if (error.code === 'auth/popup-blocked') {
+                snackbar.popupBlocked.open()
+              } else {
+                console.error(error)
+                snackbar.loginError.open()
+              }
+            })
+        })
+      } else {
+        console.error(error)
+        snackbar.loginError.open()
+      }
     })
 }
 
@@ -126,7 +107,7 @@ function logout() {
 
 function setLoggedIn(tf) {
   document.querySelector('#greeting').innerHTML = tf ? `Welcome ${user.displayName.split(' ')[0]}!` : originalGreeting
-  document.querySelector('.login-button').style.display = tf ? 'none' : 'initial'
+  Array.from(document.querySelectorAll('.login-button')).forEach((e) => (e.style.display = tf ? 'none' : 'initial'))
   document.querySelector('.logout-button').style.display = tf ? 'initial' : 'none'
   document.querySelector('.user-content').style.display = tf ? 'initial' : 'none'
   if (tf === false) {
@@ -136,6 +117,62 @@ function setLoggedIn(tf) {
     document.querySelector('#title-input').form.reset()
     document.querySelector('#picture-upload').form.reset()
   }
+}
+
+function loadUserData(result) {
+  user = result.user
+  setLoggedIn(true)
+
+  setPictureLoading(true)
+
+  const myCard = getUserCardDataRef(user.uid)
+
+  myCard
+    .get()
+    .then((doc) => {
+      let data = doc.data()
+
+      if (!doc.exists || !data.title || !data.message) {
+        data = Object.assign(
+          {
+            title: 'A Picture',
+            message: '',
+          },
+          data
+        )
+        myCard.set(data, { merge: true })
+      }
+
+      updateCaption(data)
+      updateTitleInputField(data.title)
+      cardUpdatesUnsubscribe = myCard.onSnapshot((doc) => updateCaption(doc.data()))
+    })
+    .catch((error) => {
+      console.error(error)
+      snackbar.genericError.open()
+    })
+
+  firebase
+    .storage()
+    .ref()
+    .child(`${user.uid}`)
+    .getDownloadURL()
+    .then((url) => updatePicture(url))
+    .catch((error) => {
+      setNoPicture(true)
+
+      switch (error.code) {
+        case 'storage/object-not-found':
+          console.warn('User Picture not found')
+          break
+
+        default:
+          console.error(error)
+          snackbar.genericError.open()
+          break
+      }
+    })
+    .finally(() => setPictureLoading(false))
 }
 
 function updateCaption({ title, message }) {

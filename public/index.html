@@ -50,6 +50,11 @@
           <span class="mdc-top-app-bar__title">Card Creator</span>
         </section>
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+          <button class="mdc-button mdc-button--outlined login-button" onclick="githubLogin()">
+            <span class="mdc-button__ripple"></span>
+            <span class="mdc-button__label">Log in with GitHub</span>
+          </button>
+
           <button class="mdc-button mdc-button--outlined login-button" onclick="googleLogin()">
             <span class="mdc-button__ripple"></span>
             <span class="mdc-button__label">Log in with Google</span>
@@ -202,7 +207,9 @@
 
       <footer>
         <div class="info">
-          <div class="copyright">© 2021 <a href="https://github.com/kevduc/firebasics#readme" target="_blank">Card Creator</a></div>
+          <div class="copyright">
+            © 2021 <a href="https://github.com/kevduc/firebasics#readme" target="_blank">Card Creator</a>
+          </div>
           <div class="author">by <a href="https://github.com/kevduc" target="_blank">kevduc</a></div>
           <div class="external-links">
             <a href="https://github.com/kevduc" target="_blank">
@@ -258,6 +265,18 @@
     <div class="logged-out-snackbar mdc-snackbar">
       <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
         <div class="mdc-snackbar__label" aria-atomic="false">Successfully logged out 👋</div>
+      </div>
+    </div>
+    <div class="account-exists-with-different-credential-snackbar mdc-snackbar">
+      <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
+        <div class="mdc-snackbar__label" aria-atomic="false">
+          🕵️‍♂️ Account exists with different credential, 🔗 linking credentials...
+        </div>
+      </div>
+    </div>
+    <div class="popup-blocked-snackbar mdc-snackbar">
+      <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
+        <div class="mdc-snackbar__label" aria-atomic="false">❌ Login popup window blocked. Please authorise popups.</div>
       </div>
     </div>
     <div class="logged-out-error-snackbar mdc-snackbar">
