@@ -26,7 +26,7 @@
 - Firebase Storage, setup, rules, data validation and security, read/write from the app
 - Deployment, GitHub Actions for PR preview and deploying Live
 
-### 🎨 Discover Material UI Components:
+### 🎨 Discover [Material Design](https://material.io/components?platform=web) Components:
 
 - Made use of Buttons, Cards, App bars, Text fields (with character limit), Progress indicators, Snackbars
 - Used both CSS and JavaScript libraries for the best Design and UX (e.g. for button ripple effect or to trigger notifications)
