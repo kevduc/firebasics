@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/kevduc/firebasics#readme",
   "devDependencies": {
-    "firebase-tools": "^9.13.0"
+    "firebase-tools": "^9.23.3"
   },
   "dependencies": {}
 }
