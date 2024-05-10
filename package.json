@@ -25,5 +25,11 @@
   "homepage": "https://github.com/kevduc/firebasics#readme",
   "devDependencies": {
     "firebase-tools": "^13.8.1"
+  },
+  "overrides": {
+    "google-gax": {
+      "protobufjs": "^7.2.5"
+    },
+    "semver": "^5.7.2"
   }
 }
